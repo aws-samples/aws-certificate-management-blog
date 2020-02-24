@@ -1,11 +1,6 @@
-## My Project
+## Monitoring Private CA Hierarchy with AWS Security Hub
 
-TODO: Fill this README out!
-
-Be sure to:
-
-* Change the title in this README
-* Edit your repository description on GitHub
+This Github repo contains the updated CloudFormation templates that is covered in this blog. It will cover the topic of monitoring an organization’s Private Certificate Authority hierarchy that they’ve built using AWS Certificate Manager (ACM) Private Certificate Authority (PCA). 
 
 ## License
 
