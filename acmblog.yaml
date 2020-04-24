@@ -3,6 +3,14 @@ Description: >-
   This AWS CloudFormation Template creates the necessary resources for an API
   action within ACM PCA can be sent to Security Hub
 Resources:
+  RootCA:
+    Type: AWS::ACMPCA::CertificateAuthority
+    Properties: 
+      KeyAlgorithm: RSA_2048
+      SigningAlgorithm: SHA256WITHRSA
+      Subject: 
+        CommonName: 'Organization Root CA'
+      Type: ROOT
   CreationLogGroup:
     Type: 'AWS::Logs::LogGroup'
     Properties:
@@ -11,17 +19,14 @@ Resources:
   CreationEventRule:
     Type: 'AWS::Events::Rule'
     Properties:
-      Description: CA Certificate created
+      Description: Certificate created from Root
       EventPattern:
         source:
           - aws.acm-pca
         detail-type:
-          - AWS API Call via CloudTrail
-        detail:
-          eventSource:
-            - acm-pca.amazonaws.com
-          eventName:
-            - ImportCertificateAuthorityCertificate
+          - ACM Private CA Certificate Issuance
+        resources: [!GetAtt RootCA.Arn]
+
       State: ENABLED
       Targets:
         - Arn:
@@ -66,9 +71,8 @@ Resources:
             accountNum = boto3.client('sts').get_caller_identity()['Account']
             my_session = boto3.session.Session()
             region = my_session.region_name
-            caCertARN = event['detail']['requestParameters']['certificateAuthorityArn']
-            roleName = event['detail']['userIdentity']['userName']
-            eventName = event['detail']['eventName']
+            caCertARN = event['resources'][0]
+            CaArn = event['resources'][1]
             date = datetime.datetime.now().isoformat() + "Z"
             try:
                 response = secHubClient.batch_import_findings(
@@ -87,7 +91,7 @@ Resources:
                            "Severity": {
                                "Normalized": 60
                            },
-                           "Title": "Certificate Authority Creation",
+                           "Title": "Private CA Certificate Creation",
                            "Description": "A Private CA certificate was issued in AWS Certificate Manager Private CA",
                            "Remediation": {
                                "Recommendation": {
@@ -102,8 +106,8 @@ Resources:
                                {
                                    "Details": {
                                        "Other": {
-                                          "RoleName": roleName,
-                                          "EventName": eventName
+                                          "CAArn": CaArn,
+                                          "CertARN": caCertARN
                                        }
                                    },
                                    "Type": "Other",
