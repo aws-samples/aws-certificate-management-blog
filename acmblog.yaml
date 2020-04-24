@@ -71,8 +71,8 @@ Resources:
             accountNum = boto3.client('sts').get_caller_identity()['Account']
             my_session = boto3.session.Session()
             region = my_session.region_name
-            caCertARN = event['resources'][0]
-            CaArn = event['resources'][1]
+            caCertARN = event['resources'][1]
+            CaArn = event['resources'][0]
             date = datetime.datetime.now().isoformat() + "Z"
             try:
                 response = secHubClient.batch_import_findings(
@@ -149,6 +149,8 @@ Resources:
                   Action:
                     - 'securityhub:BatchImportFindings'
                   Resource: '*'
+  SecurityHub:
+    Type: AWS::SecurityHub::Hub
   S3CrlBucket:
     DeletionPolicy: Delete
     Properties:
