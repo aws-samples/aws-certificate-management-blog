@@ -149,8 +149,6 @@ Resources:
                   Action:
                     - 'securityhub:BatchImportFindings'
                   Resource: '*'
-  SecurityHub:
-    Type: AWS::SecurityHub::Hub
   S3CrlBucket:
     DeletionPolicy: Delete
     Properties:
