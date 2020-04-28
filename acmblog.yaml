@@ -96,7 +96,7 @@ Resources:
                            "Remediation": {
                                "Recommendation": {
                                    "Text": "Verify this CA certificate creation was taken by a privileged user",
-                                   "Url": "https://docs.aws.amazon.com/acm-pca/latest/userguide/PcaAuthAccess.html"
+                                   "Url": "https://docs.aws.amazon.com/acm-pca/latest/userguide/ca-best-practices.html#minimize-root-use"
                                }
                            },
                            "ProductFields": {
