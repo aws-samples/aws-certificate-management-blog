@@ -9,7 +9,7 @@ Resources:
       KeyAlgorithm: RSA_2048
       SigningAlgorithm: SHA256WITHRSA
       Subject: 
-        CommonName: 'acmpcarootca g1'
+        CommonName: 'acmrootca g1'
       Type: ROOT
   CreationLogGroup:
     Type: 'AWS::Logs::LogGroup'
